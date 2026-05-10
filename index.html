@@ -2,197 +2,140 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nivel 16 | Chelsea</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@100;300;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cumpleaños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;600&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ffffff;
-            --accent: #00f2ff;
-            --secondary: #ff007a;
-            --bg: #020202;
+            --accent: #00e5ff;
+            --bg: #030303;
             --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.15);
-            --glow: 0 0 25px rgba(0, 242, 255, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        /* CURSOR OCULTO EN MÓVILES */
-        @media (pointer: fine) {
-            * { cursor: none; }
-            #cursor {
-                width: 8px; height: 8px;
-                background: var(--accent);
-                border-radius: 50%;
-                position: fixed;
-                pointer-events: none;
-                z-index: 9999;
-                box-shadow: 0 0 20px var(--accent);
-            }
-            #cursor-follower {
-                width: 40px; height: 40px;
-                border: 2px solid var(--accent);
-                border-radius: 50%;
-                position: fixed;
-                pointer-events: none;
-                z-index: 9998;
-                transition: transform 0.15s ease-out;
-                opacity: 0.5;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: var(--bg);
-            color: var(--primary);
+            color: #fff;
             font-family: 'Outfit', sans-serif;
             overflow: hidden;
             height: 100vh;
-            width: 100vw;
+            display: flex;
+            flex-direction: column;
         }
 
-        #canvas-bg {
+        #canvas-interactive {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0a0a12 0%, #000 100%);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1; 
+            pointer-events: none;
         }
 
-        /* NAVEGACIÓN RESPONSIVA */
+        /* NAVEGACIÓN */
         nav {
             position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
             display: flex;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
+            gap: 20px;
+            padding: 12px 25px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 100px;
             border: 1px solid var(--border);
         }
 
-        /* Desktop Nav */
-        @media (min-width: 769px) {
-            nav {
-                left: 30px; top: 50%;
-                transform: translateY(-50%);
-                flex-direction: column;
-                gap: 40px;
-                padding: 30px 15px;
-                border-radius: 50px;
-            }
-        }
-
-        /* Mobile Nav */
-        @media (max-width: 768px) {
-            nav {
-                bottom: 20px; left: 50%;
-                transform: translateX(-50%);
-                flex-direction: row;
-                gap: 20px;
-                padding: 15px 25px;
-                border-radius: 30px;
-                width: 90%;
-                justify-content: space-around;
-            }
-        }
-
         nav a {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 9px;
-            letter-spacing: 2px;
             text-decoration: none;
             color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             transition: 0.4s;
         }
 
-        nav a.active {
-            color: var(--accent);
-            text-shadow: var(--glow);
-            transform: scale(1.1);
+        nav a.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+        /* SECCIONES */
+        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
+        
+        .section { 
+            display: none; 
+            width: 100%; 
+            max-width: 650px; 
+            text-align: center;
+            animation: fadeIn 0.8s ease forwards;
         }
 
-        /* CONTENEDOR PRINCIPAL */
-        .main-container {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        @media (min-width: 769px) {
-            .main-container { padding-left: 150px; }
-        }
-
-        .section {
-            display: none;
-            width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.8s ease-out;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
         .section.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-
-        /* TEXTOS */
         .hero-title {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(3rem, 15vw, 7rem);
-            font-weight: 700;
-            line-height: 0.9;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 10vw, 4.5rem);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1;
             margin-bottom: 15px;
-            background: linear-gradient(90deg, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
-        .glass-panel {
+        /* TARJETA CON SCROLL MEJORADO */
+        .glass-card {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: clamp(20px, 5vw, 50px);
-            border-radius: 15px;
-            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 35px;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             max-height: 65vh;
             overflow-y: auto;
+            position: relative;
         }
+        
+        /* Personalización de scrollbar sutil */
+        .glass-card::-webkit-scrollbar { width: 4px; }
+        .glass-card::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        /* JUEGO RESPONSIVO */
-        .game-grid {
+        /* JUEGO: SLIDING PUZZLE */
+        .puzzle-board {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
         }
 
-        .tile {
-            aspect-ratio: 1/1;
-            background: rgba(255,255,255,0.05);
+        .puzzle-tile {
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: clamp(1.2rem, 5vw, 2rem);
-            transition: 0.4s;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
         }
 
-        .tile.flipped {
-            background: rgba(0, 242, 255, 0.1);
-            border-color: var(--accent);
-            box-shadow: var(--glow);
-        }
+        .puzzle-tile:hover { background: rgba(0, 229, 255, 0.1); border-color: var(--accent); }
+        .puzzle-tile.empty { background: transparent; border: none; cursor: default; }
 
         /* MODAL */
-        #modal-premio {
+        #modal-win {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            inset: 0;
             background: rgba(0,0,0,0.95);
             z-index: 2000;
             align-items: center;
@@ -200,175 +143,178 @@
             padding: 20px;
         }
 
-        .card-premio {
-            background: #fff;
+        .btn {
+            background: var(--accent);
             color: #000;
-            padding: clamp(30px, 8vw, 60px);
-            text-align: center;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .btn-modal {
-            margin-top: 25px;
-            padding: 15px 30px;
-            background: #000;
-            color: #fff;
+            padding: 15px 40px;
+            border-radius: 100px;
             border: none;
-            font-family: 'Syncopate', sans-serif;
-            font-size: 10px;
-            border-radius: 5px;
+            font-family: 'Outfit';
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        .btn:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
-    <canvas id="canvas-bg"></canvas>
+    <canvas id="canvas-interactive"></canvas>
 
     <nav>
         <a href="#" onclick="nav('inicio')" id="l-inicio" class="active">Inicio</a>
-        <a href="#" onclick="nav('musica')" id="l-musica">Música</a>
-        <a href="#" onclick="nav('carta')" id="l-carta">Mensaje</a>
-        <a href="#" onclick="nav('desafio')" id="l-desafio">Juego</a>
+        <a href="#" onclick="nav('musica')" id="l-musica">Playlist</a>
+        <a href="#" onclick="nav('carta')" id="l-carta">Carta</a>
+        <a href="#" onclick="nav('desafio')" id="l-desafio">Jugar</a>
     </nav>
 
-    <main class="main-container">
+    <main>
+        <!-- INICIO -->
         <section id="inicio" class="section active">
-            <p style="letter-spacing: 5px; opacity: 0.6; font-size: 12px;">NIVEL</p>
-            <h1 class="hero-title">XVI</h1>
-            <p style="color: var(--accent); font-weight: 600;">FELIZ CUMPLEAÑOS</p>
+            <h1 class="hero-title">Feliz<br>Cumpleaños</h1>
+            <p style="letter-spacing: 6px; font-size: 11px; color: var(--accent);">DATE: MAY 10, 2026</p>
         </section>
 
+        <!-- MÚSICA -->
         <section id="musica" class="section">
-            <h2 style="font-family: 'Syncopate'; margin-bottom: 20px; font-size: 1rem;">16 canciones por tus 16 años</h2>
-            <div class="glass-panel" style="padding: 10px; overflow: hidden;">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/playlist/0UFp9tUn5M3rHAr5CHpUFR?si=BxnPfKtyRXap8A1R-UOc7w" width="100%" height="380" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+            <p style="margin-bottom: 20px; font-size: 0.95rem; color: var(--accent); font-weight: 300;">
+                16 canciones que me recuerdan a ti por tus 16 años
+            </p>
+            <div class="glass-card" style="padding: 10px;">
+                <iframe style="border-radius:25px" src="https://open.spotify.com/embed/playlist/0UFp9tUn5M3rHAr5CHpUFR?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
             </div>
         </section>
 
+        <!-- CARTA COMPLETA -->
         <section id="carta" class="section">
-            <div class="glass-panel">
-                <div style="font-size: 1.1rem; line-height: 1.6; opacity: 0.9;">
-                    <p><strong>¡Feliz cumpleaños!</strong></p><br>
+            <div class="glass-card">
+                <div style="text-align: left; font-weight: 300; line-height: 1.8; font-size: 1.05rem; color: rgba(255,255,255,0.95);">
+                    <p><strong style="color: var(--accent); font-size: 1.4rem;">¡Feliz cumpleaños!</strong></p><br>
                     <p>Aunque estamos en países distintos y hay distancia de por medio, la verdad es que hablar contigo es lo que más me gusta de mis días ahora. Hay algo en cómo hablamos, en cómo me cuentas las cosas y yo te cuento a ti, que se siente real y especial. Me gustas mucho, de corazón. Más de lo que imaginé cuando empezamos a conocernos.</p><br>
-                    <p>Hoy es tu día, y quiero que sea increíble, que lo pases rodeado de gente que te quiere, comiendo lo que más te guste, haciendo algo que te haga sonreír de verdad. Te deseo un año lleno de todo lo bueno: momentos que te hagan feliz, oportunidades para hacer lo que te apasiona, y un poquito de calma cuando la necesites. Para mí, ojalá sea un año donde nos conozcamos cada día más, compartiendo más de nosotros mismos, y que poco a poco se arme algo bonito y duradero, de esos que valen la pena. Ya estoy esperando ese momento en que la distancia no sea nada y estemos juntos de verdad.</p><br>
+                    <p>Hoy es tu día, y quiero que sea increíble, que lo pases rodeado de gente que te quiere, comiendo lo que más te guste, haciendo algo que te haga sonreír de verdad. Te deseo un año lleno de todo lo bueno: momentos que te hagan feliz, oportunidades para hacer lo que te apasiona, y un poquito de calma cuando la necesites.</p><br>
+                    <p>Para mí, ojalá sea un año donde nos conozcamos cada día más, compartiendo más de nosotros mismos, y que poco a poco se arme algo bonito y duradero, de esos que valen la pena. Ya estoy esperando ese momento en que la distancia no sea nada y estemos juntos de verdad.</p><br>
                     <p>Gracias por estar ahí, por dejarme entrar en tu mundo así. ¡Que lo disfrutes mucho!</p>
                 </div>
-                <p style="margin-top: 30px; font-family: 'Syncopate'; color: var(--accent);">TE AMO, CHELSEA</p>
+                <p style="margin-top: 40px; font-family: 'Playfair Display'; font-style: italic; font-size: 28px; color: var(--accent); text-align: center;">Te amo</p>
             </div>
         </section>
 
+        <!-- JUEGO SLIDING -->
         <section id="desafio" class="section">
-            <h2 style="font-family: 'Syncopate'; text-align: center; margin-bottom: 20px; font-size: 1rem;">SINCRONIZACIÓN</h2>
-            <div class="game-grid" id="grid"></div>
+            <h2 style="margin-bottom: 10px; font-size: 14px; letter-spacing: 3px; color: var(--accent);">DESAFÍO DE LÓGICA</h2>
+            <p style="font-size: 11px; opacity: 0.6; margin-bottom: 20px;">Ordena los números del 1 al 8</p>
+            <div class="puzzle-board" id="puzzle"></div>
+            <button class="btn" style="padding: 10px 20px; font-size: 11px; background: transparent; border: 1px solid var(--accent); color: var(--accent);" onclick="initPuzzle()">Reiniciar</button>
         </section>
     </main>
 
-    <div id="modal-premio">
-        <div class="card-premio">
-            <h2 style="font-family: 'Syncopate'; font-size: 10px; color: #888; margin-bottom: 20px;">DESBLOQUEADO</h2>
-            <p style="font-size: 1.5rem; font-weight: 700; margin-bottom: 10px;">🎁 1 chance de pedirme lo que quieras.</p>
-            <p style="font-size: 1.5rem; font-weight: 700;">📦 1 regalo de verdad cuando nos veamos.</p>
-            <p style="margin-top: 20px; opacity: 0.6;">Te amo, Chelsea</p>
-            <button class="btn-modal" onclick="cerrarModal()">RECIBIR</button>
+    <div id="modal-win">
+        <div class="glass-card" style="text-align: center; max-width: 320px;">
+            <h2 class="hero-title" style="font-size: 2.5rem;">🏆</h2>
+            <p>¡Eres increíble!<br><br>Has desbloqueado:<br><b>1 Deseo especial</b> y <b>1 Regalo sorpresa</b> al vernos.</p>
+            <button class="btn" onclick="document.getElementById('modal-win').style.display='none'">RECLAMAR</button>
         </div>
     </div>
 
     <script>
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
-        
-        document.addEventListener('mousemove', e => {
-            if(cursor) {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                follower.style.left = (e.clientX - 16) + 'px';
-                follower.style.top = (e.clientY - 16) + 'px';
-            }
-        });
-
         function nav(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.getElementById('l-' + id).classList.add('active');
-            if(id === 'desafio') iniciarJuego();
+            if(id === 'desafio') initPuzzle();
         }
 
-        // FONDO
-        const canvas = document.getElementById('canvas-bg');
+        // FONDO DE PARTÍCULAS
+        const canvas = document.getElementById('canvas-interactive');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
+        let dots = [];
+        let mouse = { x: -1000, y: -1000 };
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.v = Math.random() * 0.5;
-            }
-            update() {
-                this.y -= this.v;
-                if(this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = "rgba(0, 242, 255, 0.3)";
-                ctx.beginPath(); ctx.arc(this.x, this.y, 1, 0, Math.PI*2); ctx.fill();
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            dots = [];
+            for (let i = 0; i < 70; i++) {
+                dots.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    size: Math.random() * 2
+                });
             }
         }
-        for(let i=0; i<80; i++) particles.push(new Particle());
-        function anim() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(anim);
-        }
-        anim();
 
-        // JUEGO
-        const figuras = ['💎', '✨', '🤍', '🚀', '👑', '🌙', '⭐', '🔥'];
-        let cartas = [...figuras, ...figuras];
-        let elegidas = [];
-        let parejas = 0;
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        window.addEventListener('resize', initCanvas);
 
-        function iniciarJuego() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = ''; parejas = 0; elegidas = [];
-            cartas.sort(() => Math.random() - 0.5);
-            cartas.forEach(fig => {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.dataset.val = fig;
-                tile.onclick = () => {
-                    if(elegidas.length < 2 && !tile.classList.contains('flipped')) {
-                        tile.classList.add('flipped');
-                        tile.innerText = fig;
-                        elegidas.push(tile);
-                        if(elegidas.length === 2) setTimeout(revisar, 600);
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dots.forEach((d, i) => {
+                d.x += d.vx; d.y += d.vy;
+                if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+                if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+                dots.slice(i + 1).forEach(d2 => {
+                    let dist = Math.hypot(d.x - d2.x, d.y - d2.y);
+                    if (dist < 130) {
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${0.08 * (1 - dist/130)})`;
+                        ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d2.x, d2.y); ctx.stroke();
                     }
-                };
-                grid.appendChild(tile);
+                });
+                ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+                ctx.beginPath(); ctx.arc(d.x, d.y, d.size, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        initCanvas(); animate();
+
+        // LÓGICA DEL PUZZLE (SLIDING PUZZLE)
+        let state = [1, 2, 3, 4, 5, 6, 7, 8, null];
+        
+        function initPuzzle() {
+            const board = document.getElementById('puzzle');
+            board.innerHTML = '';
+            // Mezclar (Shuffle)
+            state = [1, 2, 3, 4, 5, 6, 7, 8, null].sort(() => Math.random() - 0.5);
+            renderPuzzle();
+        }
+
+        function renderPuzzle() {
+            const board = document.getElementById('puzzle');
+            board.innerHTML = '';
+            state.forEach((num, i) => {
+                const div = document.createElement('div');
+                div.className = `puzzle-tile ${num === null ? 'empty' : ''}`;
+                div.innerText = num || '';
+                div.onclick = () => moveTile(i);
+                board.appendChild(div);
             });
         }
 
-        function revisar() {
-            if(elegidas[0].dataset.val === elegidas[1].dataset.val) {
-                parejas++;
-                if(parejas === figuras.length) document.getElementById('modal-premio').style.display = 'flex';
-            } else {
-                elegidas.forEach(t => { t.classList.remove('flipped'); t.innerText = ''; });
+        function moveTile(index) {
+            const emptyIdx = state.indexOf(null);
+            const validMoves = [index-1, index+1, index-3, index+3];
+            
+            // Verificar si el movimiento es adyacente y no salta de fila
+            const isAdj = validMoves.includes(emptyIdx);
+            const isSameRow = Math.floor(index/3) === Math.floor(emptyIdx/3);
+            const isSameCol = index%3 === emptyIdx%3;
+
+            if (isAdj && (isSameRow || isSameCol)) {
+                [state[index], state[emptyIdx]] = [state[emptyIdx], state[index]];
+                renderPuzzle();
+                checkWin();
             }
-            elegidas = [];
         }
 
-        function cerrarModal() { document.getElementById('modal-premio').style.display = 'none'; }
+        function checkWin() {
+            const winState = [1, 2, 3, 4, 5, 6, 7, 8, null];
+            if (state.every((val, i) => val === winState[i])) {
+                setTimeout(() => document.getElementById('modal-win').style.display = 'flex', 500);
+            }
+        }
     </script>
 </body>
 </html>
